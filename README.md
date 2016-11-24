@@ -1,6 +1,4 @@
-# my-project
-
-> A Vue.js project
+# Medusa Frontend
 
 ## Build Setup
 
@@ -14,5 +12,3 @@ npm run dev
 # build for production with minification
 npm run build
 ```
-
-For more information see the [docs for vueify](https://github.com/vuejs/vueify).
