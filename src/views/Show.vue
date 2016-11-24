@@ -1,93 +1,97 @@
-<!-- <div>Show {{ $route.params.showId }}</div> -->
 <template>
     <div id="content">
+        <div class="pull-left form-inline">
+            Change Show:
+            <div class="navShow"><img v-on:click="prevShow()" id="prevShow" src="dist/images/prev.png" alt="&lt;&lt;" title="Prev Show" /></div>
+            <select v-model="show.id['tvdb']" id="pickShow" class="form-control form-control-inline input-sm">
+                <option v-for="x in shows" v-bind:value="x.id['tvdb']" v-bind:selected="x.id['tvdb'] === show.id['tvdb'] ? 'selected' : ''">{{x.title}}</option>
+            </select>
+            <div class="navShow"><img v-on:click="nextShow()" id="nextShow" src="dist/images/next.png" alt="&gt;&gt;" title="Next Show" /></div>
+        </div>
         {{show}}
     </div>
 </template>
 
 <script>
+// Services
+import api from '../services/api.js'
+import apiAsset from '../services/apiAsset.js'
+import store from '../services/store.js'
+
+// Methods
+import anonRedirect from '../methods/anonRedirect.js'
+import prettyFileSize from '../methods/prettyFileSize.js'
+
+// Components
+import QualityPill from '../components/QualityPill.vue'
+
 export default {
     name: 'show',
     data() {
         return {
-            show: {}
+            shows: [],
+            show: {
+                id: {
+                    tvdb: ''
+                }
+            }
         }
     },
+    created() {
+        this.getShows();
+        this.getShow(this.$route.params.showId);
+    },
+    methods: {
+        apiAsset,
+        getShow: function(showId) {
+            if (showId) {
+                var vm = this;
+                api.get('show/tvdb' + showId).then(function(response) {
+                    vm.show = response.data;
+                }).catch(function (error) {
+                    throw new Error(error);
+                });
+            }
+        },
+        getShows: function() {
+            var vm = this;
+            api.get('show').then(function(response) {
+                vm.shows = response.data;
+            }).catch(function (error) {
+                throw new Error(error);
+            });
+        },
+        prevShow: function() {
+            let prevShow = document.querySelector(`option[value="${this.show.id['tvdb']}"]`).previousElementSibling;
+            if (prevShow) {
+                this.getShow(prevShow.value);
+            }
+        },
+        nextShow: function() {
+            let nextShow = document.querySelector(`option[value="${this.show.id['tvdb']}"]`).nextElementSibling;
+            if (nextShow) {
+                this.getShow(nextShow.value);
+            }
+        },
+        prettyFileSize,
+        anonRedirect
+    },
     watch: {
-        '$route' (to, from) {
-            // react to route changes...
+        'show.id.tvdb': function(to, from) {
+            if (to !== from) {
+                this.$router.push({
+                    name: 'show',
+                    params: {
+                        showId: to
+                    }
+                });
+            }
+        },
+        '$route': function(to, from) {
+            if (to !== from) {
+                this.getShow(to.params.showId);
+            }
         }
     }
 }
-
-//  var startVue = function(){
-//      app = new Vue({
-//          el: '#vue-wrap',
-//          data: {
-//              show: {},
-//              shows: {},
-//              MEDUSA: MEDUSA,
-//              statuses: {
-//                  UNKNOWN: -1,
-//                  UNAIRED: 1,
-//                  SNATCHED: 2,
-//                  WANTED: 3,
-//                  DOWNLOADED: 4,
-//                  SKIPPED: 5,
-//                  ARCHIVED: 6,
-//                  IGNORED: 7,
-//                  SNATCHED_PROPER: 9,
-//                  SUBTITLED: 10,
-//                  FAILED: 11,
-//                  SNATCHED_BEST: 12
-//              }
-//          },
-//          methods: {
-//              getShow: function() {
-//                  var vm = this;
-//                  axios.get('/api/v2/show/' + parseInt(document.location.search.split('show=')[1], 10) + '?api_key=' + apiKey).then(function(response) {
-//                      vm.show = response.data.shows[0];
-//                      vm.show.seasons.reverse().forEach(function(season){
-//                          season.episodes.reverse();
-//                      });
-//                  }).catch(function (error) {
-//                      throw new Error(error);
-//                  });
-//              },
-//              getShows: function() {
-//                  var vm = this;
-//                  axios.get('/api/v2/show?api_key=' + apiKey).then(function(response) {
-//                      vm.shows = response.data.shows;
-//                  }).catch(function (error) {
-//                      throw new Error(error);
-//                  });
-//              },
-//              anonRedirect: function(e) {
-//                  e.preventDefault();
-//                  var url = e.target.nodeName === 'IMG' ? e.target.parentElement.href : e.target.href;
-//                  window.open(MEDUSA.info.anonRedirect + url, '_blank');
-//              },
-//              prettyFileSize: function(bytes) {
-//                  // http://stackoverflow.com/a/14919494/2311366
-//                  if(Math.abs(bytes) < 1024) {
-//                      return bytes + ' B';
-//                  }
-//                  var units = ['kB','MB','GB','TB','PB','EB','ZB','YB'];
-//                  var u = -1;
-//                  do {
-//                      bytes /= 1024;
-//                      ++u;
-//                  } while(Math.abs(bytes) >= 1024 && u < units.length - 1);
-//                  return bytes.toFixed(1) + ' ' + units[u];
-//              }
-//          },
-//          mounted: function () {
-//              this.$nextTick(function() {
-//                  // this.$el is in-document
-//                  this.getShow();
-//                  this.getShows();
-//              });
-//          }
-//      });
-//  };
 </script>

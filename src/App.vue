@@ -165,9 +165,3 @@ export default {
     }
 }
 </script>
-<style scoped>
-#content {
-    width: 100%;
-    margin-top:51px;
-}
-</style>
