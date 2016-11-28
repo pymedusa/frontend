@@ -49,6 +49,7 @@ export default {
         displayShowSpecials: null,
         downloadUrl: null,
         subtitlesMulti: null,
+        namingForceFolders: null,
         kodi: {
             enabled: null
         },

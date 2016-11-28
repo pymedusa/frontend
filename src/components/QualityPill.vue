@@ -6,7 +6,6 @@ export default {
     name: 'quality-pill',
         props: {
             showQuality: {
-                type: Object,
                 required: true
             },
             showTitle: {

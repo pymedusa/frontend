@@ -87,8 +87,8 @@
                     <td>
                         <span style="display: none;">{{show.name}}</span>
                         <div class="imgbanner banner">
-                            <router-link :to="{ name: 'show', params: { showId: show.id['tvdb'] }}">
-                                <img v-bind:src="apiAsset('show', show.id['tvdb'], 'banner')" class="banner" v-bind:alt="show.name" v-bind:title="show.name"/>
+                            <router-link :to="{ name: 'show', params: { showId: show.id[show.indexer] }}">
+                                <img v-bind:src="apiAsset('show', show.id[show.indexer], 'banner')" class="banner" v-bind:alt="show.name" v-bind:title="show.name"/>
                             </router-link>
                         </div>
                     </td>
@@ -154,10 +154,8 @@ export default {
         apiAsset,
         getShows: function(){
             var vm = this;
-            api.get('show?detailed=true').then(function(response) {
+            api.get('show').then(function(response) {
                 vm.shows = response.data;
-            }).catch(function (error) {
-                throw new Error(error);
             });
         },
         prettyFileSize,
