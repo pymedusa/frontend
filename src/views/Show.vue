@@ -268,21 +268,11 @@
                     </td>
                     <td class="col-name">{{episode.location}}</td>
                     <td v-if="episode.fileSize" class="col-ep">{{prettyFileSize(episode.fileSize)}}</td>
-                    <!--## <td class="col-airdate">
-                    ##     % if int(epResult['airdate']) != 1:
-                    ##         ## Lets do this exactly like ComingEpisodes and History
-                    ##         ## Avoid issues with dateutil's _isdst on Windows but still provide air dates
-                    ##          airDate = datetime.datetime.fromordinal(epResult['airdate']) %>
-                    ##         % if airDate.year >= 1970 or show.network:
-                    ##              airDate = sbdatetime.sbdatetime.convert_to_setting(network_timezones.parse_date_time(epResult['airdate'], show.airs, show.network)) %>
-                    ##         % endif
-                    ##         <time datetime="${airDate.isoformat('T')}" class="date">${sbdatetime.sbdatetime.sbfdatetime(airDate)}</time>
-                    ##     % else:
-                    ##         Never
-                    ##     % endif
-                    ## </td> -->
+                    <td class="col-airdate">
+                        <time v-if="(new Date(episode.airDate)).getFullYear() >= 1970" v-bind:datetime="(new Date(episode.airDate)).toISOString()" class="date">{{new Date(episode.airDate)}}</time>
+                    </td>
                     <td>
-                        <center v-if="config.downloadUrl && episode.location && ['Downloaded', 'Archived'].indexOf(episode.status)">
+                        <center v-if="config.downloadUrl && episode.location && [statusStrings.DOWNLOADED, statusStrings.ARCHIVED].indexOf(episode.status)">
                             <a v-bind:href="config.downloadUrl + episode.location.replace(config.rootDirs.split('|')[1], '')">Download</a>
                         </center>
                     </td>
@@ -296,22 +286,26 @@
                     ##         <td class="col-status">${statusStrings[curStatus]} ${renderQualityPill(curQuality)}</td>
                     ##     % else:
                     ##         <td class="col-status">${statusStrings[curStatus]}</td>
-                    ##     % endif
-                    ## <td class="col-search">
-                    ##     % if int(epResult["season"]) != 0:
-                    ##         % if (int(epResult["status"]) in Quality.SNATCHED + Quality.SNATCHED_PROPER + Quality.SNATCHED_BEST + Quality.DOWNLOADED ) and app.USE_FAILED_DOWNLOADS:
-                    ##             <a class="epRetry" id="${str(show.indexerid)}x${str(epResult["season"])}x${str(epResult["episode"])}" name="${str(show.indexerid)}x${str(epResult["season"])}x${str(epResult["episode"])}" href="home/retryEpisode?show=${show.indexerid}&amp;season=${epResult["season"]}&amp;episode=${epResult["episode"]}"><img data-ep-search src="dist/images/search16.png" height="16" alt="retry" title="Retry Download" /></a>
-                    ##         % else:
-                    ##             <a class="epSearch" id="${str(show.indexerid)}x${str(epResult["season"])}x${str(epResult["episode"])}" name="${str(show.indexerid)}x${str(epResult["season"])}x${str(epResult["episode"])}" href="home/searchEpisode?show=${show.indexerid}&amp;season=${epResult["season"]}&amp;episode=${epResult["episode"]}"><img data-ep-search src="dist/images/search16.png" width="16" height="16" alt="search" title="Forced Search" /></a>
-                    ##         % endif
-                    ##         <a class="epManualSearch" id="${str(show.indexerid)}x${str(epResult["season"])}x${str(epResult["episode"])}" name="${str(show.indexerid)}x${str(epResult["season"])}x${str(epResult["episode"])}" href="home/snatchSelection?show=${show.indexerid}&amp;season=${epResult["season"]}&amp;episode=${epResult["episode"]}&amp;manual_search_type=episode"><img data-ep-manual-search src="dist/images/manualsearch.png" width="16" height="16" alt="search" title="Manual Search" /></a>
-                    ##     % else:
-                    ##         <a class="epManualSearch" id="${str(show.indexerid)}x${str(epResult["season"])}x${str(epResult["episode"])}" name="${str(show.indexerid)}x${str(epResult["season"])}x${str(epResult["episode"])}" href="home/snatchSelection?show=${show.indexerid}&amp;season=${epResult["season"]}&amp;episode=${epResult["episode"]}&amp;manual_search_type=episode"><img data-ep-manual-search src="dist/images/manualsearch.png" width="16" height="16" alt="search" title="Manual Search" /></a>
-                    ##     % endif
-                    ##     % if int(epResult["status"]) not in Quality.SNATCHED + Quality.SNATCHED_PROPER and app.USE_SUBTITLES and show.subtitles and epResult["location"] and subtitles.needs_subtitles(epResult['subtitles']):
+                    ##     % endif -->
+                    <td class="col-search">
+                        <template v-if="episode.season !== 0">
+                            <a v-if="config.useFailedDownloads && [statusStrings.SNATCHED, statusStrings.SNATCHED_PROPER, statusStrings.SNATCHED_BEST, statusStrings.DOWNLOADED].indexOf(episode.status)">
+                                <img src="dist/images/search16.png" height="16" alt="retry" title="Retry Download" />
+                            </a>
+                            <a v-else>
+                                <img data-ep-search src="dist/images/search16.png" width="16" height="16" alt="search" title="Forced Search" />
+                            </a>
+                            <!-- <a class="epManualSearch" id="${str(show.indexerid)}x${str(epResult["season"])}x${str(epResult["episode"])}" name="${str(show.indexerid)}x${str(epResult["season"])}x${str(epResult["episode"])}" href="home/snatchSelection?show=${show.indexerid}&amp;season=${epResult["season"]}&amp;episode=${epResult["episode"]}&amp;manual_search_type=episode">
+                                <img data-ep-manual-search src="dist/images/manualsearch.png" width="16" height="16" alt="search" title="Manual Search" />
+                            </a> -->
+                        </template>
+                        <template v-else>
+                            <!-- <a class="epManualSearch" id="${str(show.indexerid)}x${str(epResult["season"])}x${str(epResult["episode"])}" name="${str(show.indexerid)}x${str(epResult["season"])}x${str(epResult["episode"])}" href="home/snatchSelection?show=${show.indexerid}&amp;season=${epResult["season"]}&amp;episode=${epResult["episode"]}&amp;manual_search_type=episode"><img data-ep-manual-search src="dist/images/manualsearch.png" width="16" height="16" alt="search" title="Manual Search" /></a> -->
+                        <template>
+                    <!-- ##     % if int(epResult["status"]) not in Quality.SNATCHED + Quality.SNATCHED_PROPER and app.USE_SUBTITLES and show.subtitles and epResult["location"] and subtitles.needs_subtitles(epResult['subtitles']):
                     ##         <a class="epSubtitlesSearch" href="home/searchEpisodeSubtitles?show=${show.indexerid}&amp;season=${epResult["season"]}&amp;episode=${epResult["episode"]}"><img src="dist/images/closed_captioning.png" height="16" alt="search subtitles" title="Search Subtitles" /></a>
-                    ##     % endif
-                    ## </td> -->
+                    ##     % endif -->
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -335,6 +329,7 @@ export default {
     name: 'show',
     data() {
         return {
+            isLoading: false,
             shows: [],
             show: {
                 id: {
@@ -372,7 +367,21 @@ export default {
                 },
                 size: 0 // @TODO: This is ${pretty_file_size(app.helpers.get_size(showLoc[0]))} in Python
             },
-            config: store.state
+            config: store.state,
+            statusStrings: {
+                UNKNOWN: "Unknown",
+                UNAIRED: "Unaired",
+                SNATCHED: "Snatched",
+                DOWNLOADED: "Downloaded",
+                SKIPPED: "Skipped",
+                SNATCHED_PROPER: "Snatched (Proper)",
+                WANTED: "Wanted",
+                ARCHIVED: "Archived",
+                IGNORED: "Ignored",
+                SUBTITLED: "Subtitled",
+                FAILED: "Failed",
+                SNATCHED_BEST: "Snatched (Best)"
+            }
         }
     },
     created() {
@@ -384,13 +393,17 @@ export default {
         getShow: function(showId) {
             if (showId) {
                 var vm = this;
-                api.get('show/tvdb' + showId).then(function(response) {
-                    for (var key in response.data) {
-                        vm.$set(vm.show, key, response.data[key]);
-                    }
-                }).catch(function (error) {
-                    throw new Error(error);
-                });
+                if (!vm.isLoading) {
+                    vm.isLoading = true;
+                    api.get('show/tvdb' + showId).then(function(response) {
+                        for (var key in response.data) {
+                            vm.$set(vm.show, key, response.data[key]);
+                        }
+                        vm.isLoading = false;
+                    }).catch(function (error) {
+                        throw new Error(error);
+                    });
+                }
             }
         },
         getShows: function() {
