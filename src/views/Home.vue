@@ -101,7 +101,7 @@
                         </span>
                         <span v-else>
                             <span title="No Network" class="hidden-print">
-                                <img id="network" width="54" height="27" src="dist/images/network/no-network.png" alt="No Network" title="No Network" />
+                                <img id="network" width="54" height="27" src="/dist/images/network/no-network.png" alt="No Network" title="No Network" />
                             </span>
                             <span class="visible-print-inline">No Network</span>
                         </span>
@@ -115,7 +115,7 @@
                     </td>
                     <td align="center" data-show-size="show.fileSize">{{prettyFileSize(show.fileSize)}}</td>
                     <td align="center">
-                        <img v-bind:src="'dist/images/' + (!show.paused && show.status === 'Continuing' ? 'Yes' : 'No') + '16.png'" v-bind:alt="(!show.paused && show.status === 'Continuing' ? 'Yes' : 'No')" width="16" height="16" />
+                        <img v-bind:src="'/dist/images/' + (!show.paused && show.status === 'Continuing' ? 'Yes' : 'No') + '16.png'" v-bind:alt="(!show.paused && show.status === 'Continuing' ? 'Yes' : 'No')" width="16" height="16" />
                     </td>
                     <td align="center">{{show.status}}</td>
                 </tr>
@@ -154,6 +154,8 @@ export default {
             var vm = this;
             api.get('show').then(function(response) {
                 vm.shows = response.data;
+            }).catch(function (error) {
+                console.log(error);
             });
         },
         prettyFileSize,

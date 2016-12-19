@@ -1,7 +1,6 @@
-import store from '../services/store.js'
-
 export default function(assetGroup, query, assetType) {
+    var vm = this;
     if (![assetGroup, query, assetType].includes(undefined)) {
-        return store.auth.url + 'asset/' + assetGroup + '/' + String(query).toLowerCase() + '?api_key=' + store.auth.key + '&type=' + assetType;
+        return vm.config.auth.url + 'asset/' + assetGroup + '/' + String(query).toLowerCase() + '?api_key=' + localStorage.getItem('idToken') + '&type=' + assetType;
     }
 }

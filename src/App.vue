@@ -1,6 +1,5 @@
 <template>
     <div>
-        You are {{authenticated ? '' : 'not'}} logged in.
         <nav v-if="authenticated" class="navbar navbar-default navbar-fixed-top hidden-print" role="navigation">
             <div class="container-fluid">
                 <div class="navbar-header">
@@ -22,16 +21,16 @@
                                 <b class="caret"></b>
                             </router-link>
                             <ul class="dropdown-menu">
-                                <!-- <li><router-link :to="{ name: 'home' }"><i class="menu-icon-home"></i>&nbsp;Show List</router-link></li>
-                                <li><router-link :to="{ name: 'addShow' }"><i class="menu-icon-addshow"></i>&nbsp;Add Shows</router-link></li>
+                                <li><router-link :to="{ name: 'home' }"><i class="menu-icon-home"></i>&nbsp;Show List</router-link></li>
+                                <!-- <li><router-link :to="{ name: 'addShow' }"><i class="menu-icon-addshow"></i>&nbsp;Add Shows</router-link></li>
                                 <li><router-link :to="{ name: 'addRecommended' }"><i class="menu-icon-addshow"></i>&nbsp;Add Recommended Shows</router-link></li>
                                 <li><router-link :to="{ name: 'postProcess' }"><i class="menu-icon-postprocess"></i>&nbsp;Manual Post-Processing</router-link></li>
-                                <li v-if="recentShows.length > 0" role="separator" class="divider"></li>
+                                <li v-if="recentShows.length > 0" role="separator" class="divider"></li> -->
                                 <li v-for="show in recentShows">
                                     <router-link :to="{ name: 'show', params:{ showId: show.ids['thetvdb'] } }">
                                         <i class="menu-icon-addshow"></i> {{show.name}}
                                     </router-link>
-                                </li> -->
+                                </li>
                             </ul>
                             <div style="clear:both;"></div>
                         </li>

@@ -6,13 +6,16 @@ export default {
     },
     login() {
         var vm = this;
-        api.post('/auth/login', {
+        // @NOTE: If you're not logged in then all URLs will be naked
+        vm.baseUrl = vm.baseUrl.replace(/\/+$/, ''); // Remove trailing slashes
+        api.post(vm.baseUrl + '/auth/login', {
             username: vm.username,
             password: vm.password
         }).then(function (response) {
             // Set the token and user profile in local storage
             // @TODO: Replace apiKey with idToken once we have JWT
             localStorage.setItem('idToken', response.data.apiKey);
+            localStorage.setItem('baseUrl', vm.baseUrl);
             localStorage.setItem('user', JSON.stringify({
                 roles: ['admin', 'user']
             }));
@@ -34,16 +37,23 @@ export default {
                     name: 'home'
                 });
             }).catch(function(error) {
+                if (error.response.data.error) {
+                    vm.error = error.response.data.error;
+                }
                 throw new Error(error);
             });
         }).catch(function (error) {
-            console.log(error);
+            if (error.response.data.error) {
+                vm.error = error.response.data.error;
+            }
+            throw new Error(error);
         });
     },
     logout() {
         // To log out, we just need to remove the token and profile from local storage and $store
         localStorage.removeItem('idToken');
         localStorage.removeItem('refreshToken');
+        localStorage.removeItem('baseUrl');
         localStorage.removeItem('user');
         this.$store.authenticated = false;
         this.$store.user = {};

@@ -2,11 +2,11 @@
     <div id="content">
         <div class="pull-left form-inline">
             Change Show:
-            <div class="navShow"><img v-on:click="prevShow()" id="prevShow" src="dist/images/prev.png" alt="&lt;&lt;" title="Prev Show" /></div>
+            <div class="navShow"><img v-on:click="prevShow()" id="prevShow" src="/dist/images/prev.png" alt="&lt;&lt;" title="Prev Show" /></div>
             <select v-model="show.id[show.indexer]" id="pickShow" class="form-control form-control-inline input-sm">
                 <option v-for="x in shows" v-bind:value="x.id[x.indexer]" v-bind:selected="x.id[x.indexer] === show.id[show.indexer] ? 'selected' : ''">{{x.title}}</option>
             </select>
-            <div class="navShow"><img v-on:click="nextShow()" id="nextShow" src="dist/images/next.png" alt="&gt;&gt;" title="Next Show" /></div>
+            <div class="navShow"><img v-on:click="nextShow()" id="nextShow" src="/dist/images/next.png" alt="&gt;&gt;" title="Next Show" /></div>
         </div>
         <div class="clearfix"></div>
         <div id="showtitle">
@@ -42,21 +42,21 @@
                 <img id="showBanner" v-bind:src="apiAsset('show', show.id[show.indexer], 'banner')"/>
                 <div id="showinfo">
                     <span v-if="show.rating.imdb" class="imdbstars" v-bind:qtip-content="show.rating.imdb.stars + ' / 10 Stars<br>' + show.rating.imdb.votes + ' Votes'">{{show.rating.imdb.stars}}</span>
-                    <img v-if="show.rating.imdb" v-for="country in show.countries" src="dist/images/blank.png" v-bind:class="'country-flag flag-' + country" width="16" height="11" style="margin-left: 3px; vertical-align:middle;" />
+                    <img v-if="show.rating.imdb" v-for="country in show.countries" src="/dist/images/blank.png" v-bind:class="'country-flag flag-' + country" width="16" height="11" style="margin-left: 3px; vertical-align:middle;" />
                     <span>({{show.year.start}}) - {{show.runtime}} minutes - </span>
                     <a v-if="show.id.imdb" v-bind:href="'https://www.imdb.com/title/' + show.id.imdb" rel="noreferrer" v-on:click="anonRedirect" v-bind:title="'https://www.imdb.com/title/' + show.id.imdb">
-                        <img alt="[imdb]" height="16" width="16" src="dist/images/imdb.png" style="margin-top: -1px; vertical-align:middle;"/>
+                        <img alt="[imdb]" height="16" width="16" src="/dist/images/imdb.png" style="margin-top: -1px; vertical-align:middle;"/>
                     </a>
                     <a v-bind:href="'http://thetvdb.com/?tab=series&id=' + show.id[show.indexer]" v-bind:title="'http://thetvdb.com/?tab=series&id=' + show.id[show.indexer]">
-                        <img alt="[thetvdb]" height="16" width="16" src="dist/images/thetvdb16.png" style="margin-top: -1px; vertical-align:middle;"/>
+                        <img alt="[thetvdb]" height="16" width="16" src="/dist/images/thetvdb16.png" style="margin-top: -1px; vertical-align:middle;"/>
                     </a>
                     <!-- <! % if xem_numbering or xem_absolute_numbering:
                     <a href="${anon_url('http://thexem.de/search?q=', show.title)}" rel="noreferrer" onclick="window.open(this.href, '_blank'); return false;" title="http://thexem.de/search?q-${show.title}">
-                        <img alt="[xem]" height="16" width="16" src="dist/images/xem.png" style="margin-top: -1px; vertical-align:middle;"/>
+                        <img alt="[xem]" height="16" width="16" src="/dist/images/xem.png" style="margin-top: -1px; vertical-align:middle;"/>
                     </a>
                     % endif -->
                     <a v-bind:href="'https://fanart.tv/series/' + show.id.imdb" v-bind:title="'https://fanart.tv/series/' + show.id.imdb">
-                        <img alt="[fanart.tv]" height="16" width="16" src="dist/images/fanart.tv.png" class="fanart"/>
+                        <img alt="[fanart.tv]" height="16" width="16" src="/dist/images/fanart.tv.png" class="fanart"/>
                     </a>
                 </div>
                 <div v-if="show.genres" id="tags">
@@ -122,15 +122,15 @@
                         <!-- @TODO: next 2 lines need to be converted to js -->
                         <!--  -->
                         <!--  info_flag = subtitles.code_from_code(show.lang) if show.lang else '' %> -->
-                        <!-- <tr><td class="showLegend">Info Language:</td><td><img v-bind:src="'dist/images/subtitles/flags/' + show.language + '.png'" width="16" height="11" v-bind:alt="show.language" v-bind:title="show.language" onError="this.onerror=null;this.src='dist/images/flags/unknown.png';"/></td></tr> -->
-                        <tr v-if="config.useSubtitles"><td class="showLegend">Subtitles: </td><td><img v-bind:src="'dist/images/' + (show.subtitles ? 'yes' : 'no') + '16.png'" v-bind:alt="show.subtitles ? 'Y' : 'N'" width="16" height="16" /></td></tr>
-                        <tr><td class="showLegend">Season Folders: </td><td><img v-bind:src="'dist/images/' + ((show.config.flattenFolders || config.namingForceFolders) ? 'yes' : 'no') + '16.png'" alt="((show.config.flattenFolders || config.namingForceFolders) ? 'Y' : 'N')" width="16" height="16" /></td></tr>
-                        <tr><td class="showLegend">Paused: </td><td><img v-bind:src="'dist/images/' + (show.paused ? 'yes' : 'no') + '16.png'" v-bind:alt="show.paused ? 'Y' : 'N'" width="16" height="16" /></td></tr>
-                        <tr><td class="showLegend">Air-by-Date: </td><td><img v-bind:src="'dist/images/' + (show.airByDate ? 'yes' : 'no') + '16.png'" v-bind:alt="show.airByDate ? 'Y' : 'N'" width="16" height="16" /></td></tr>
-                        <tr><td class="showLegend">Sports: </td><td><img v-bind:src="'dist/images/' + (show.sports ? 'yes' : 'no') + '16.png'" v-bind:alt="show.sports ? 'Y' : 'N'" width="16" height="16" /></td></tr>
-                        <tr><td class="showLegend">Anime: </td><td><img v-bind:src="'dist/images/' + (show.anime ? 'yes' : 'no') + '16.png'" v-bind:alt="show.anime ? 'Y' : 'N'" width="16" height="16" /></td></tr>
-                        <tr><td class="showLegend">DVD Order: </td><td><img v-bind:src="'dist/images/' + (show.dvdrder ? 'yes' : 'no') + '16.png'" v-bind:alt="show.dvdOrder ? 'Y' : 'N'" width="16" height="16" /></td></tr>
-                        <tr><td class="showLegend">Scene Numbering: </td><td><img v-bind:src="'dist/images/' + (show.scene ? 'yes' : 'no') + '16.png'" v-bind:alt="show.scene ? 'Y' : 'N'" width="16" height="16" /></td></tr>
+                        <!-- <tr><td class="showLegend">Info Language:</td><td><img v-bind:src="'/dist/images/subtitles/flags/' + show.language + '.png'" width="16" height="11" v-bind:alt="show.language" v-bind:title="show.language" onError="this.onerror=null;this.src='/dist/images/flags/unknown.png';"/></td></tr> -->
+                        <tr v-if="config.useSubtitles"><td class="showLegend">Subtitles: </td><td><img v-bind:src="'/dist/images/' + (show.subtitles ? 'yes' : 'no') + '16.png'" v-bind:alt="show.subtitles ? 'Y' : 'N'" width="16" height="16" /></td></tr>
+                        <tr><td class="showLegend">Season Folders: </td><td><img v-bind:src="'/dist/images/' + ((show.config.flattenFolders || config.namingForceFolders) ? 'yes' : 'no') + '16.png'" alt="((show.config.flattenFolders || config.namingForceFolders) ? 'Y' : 'N')" width="16" height="16" /></td></tr>
+                        <tr><td class="showLegend">Paused: </td><td><img v-bind:src="'/dist/images/' + (show.paused ? 'yes' : 'no') + '16.png'" v-bind:alt="show.paused ? 'Y' : 'N'" width="16" height="16" /></td></tr>
+                        <tr><td class="showLegend">Air-by-Date: </td><td><img v-bind:src="'/dist/images/' + (show.airByDate ? 'yes' : 'no') + '16.png'" v-bind:alt="show.airByDate ? 'Y' : 'N'" width="16" height="16" /></td></tr>
+                        <tr><td class="showLegend">Sports: </td><td><img v-bind:src="'/dist/images/' + (show.sports ? 'yes' : 'no') + '16.png'" v-bind:alt="show.sports ? 'Y' : 'N'" width="16" height="16" /></td></tr>
+                        <tr><td class="showLegend">Anime: </td><td><img v-bind:src="'/dist/images/' + (show.anime ? 'yes' : 'no') + '16.png'" v-bind:alt="show.anime ? 'Y' : 'N'" width="16" height="16" /></td></tr>
+                        <tr><td class="showLegend">DVD Order: </td><td><img v-bind:src="'/dist/images/' + (show.dvdrder ? 'yes' : 'no') + '16.png'" v-bind:alt="show.dvdOrder ? 'Y' : 'N'" width="16" height="16" /></td></tr>
+                        <tr><td class="showLegend">Scene Numbering: </td><td><img v-bind:src="'/dist/images/' + (show.scene ? 'yes' : 'no') + '16.png'" v-bind:alt="show.scene ? 'Y' : 'N'" width="16" height="16" /></td></tr>
                     </table>
                 </div>
             </div>
@@ -224,8 +224,8 @@
                     <td class="col-checkbox">
                         <input v-if="episode.status !== 'Unaired'" type="checkbox" class="epCheck" v-bind:id="episode.season + 'x' + episode.episode" v-bind:name="episode.season + 'x' + episode.episode" />
                     </td>
-                    <td align="center"><img v-bind:src="'dist/images/nfo' + (episode.hasNfo ? '' : '-no') + '.gif'" v-bind:alt="episode.hasNfo ? 'Y' : 'N'" width="23" height="11" /></td>
-                    <td align="center"><img v-bind:src="'dist/images/tbn' + (episode.hasTbn ? '' : '-no') + '.gif'" v-bind:alt="episode.hasTbn ? 'Y' : 'N'" width="23" height="11" /></td>
+                    <td align="center"><img v-bind:src="'/dist/images/nfo' + (episode.hasNfo ? '' : '-no') + '.gif'" v-bind:alt="episode.hasNfo ? 'Y' : 'N'" width="23" height="11" /></td>
+                    <td align="center"><img v-bind:src="'/dist/images/tbn' + (episode.hasTbn ? '' : '-no') + '.gif'" v-bind:alt="episode.hasTbn ? 'Y' : 'N'" width="23" height="11" /></td>
                     <td align="center">
                         <!-- text = str(epResult['episode'])
                         if epLoc != '' and epLoc is not None:
@@ -262,8 +262,8 @@
                         style="padding: 0; text-align: center; max-width: 60px;"/> -->
                     </td>
                     <td class="col-name">
-                        <img v-if="episode.description" src="dist/images/info32.png" width="16" height="16" class="plotInfo" alt="" v-bind:id="'plot_info_' + episode.season + '_' + episode.episode" />
-                        <img v-else src="dist/images/info32.png" width="16" height="16" class="plotInfoNone" alt="" />
+                        <img v-if="episode.description" src="/dist/images/info32.png" width="16" height="16" class="plotInfo" alt="" v-bind:id="'plot_info_' + episode.season + '_' + episode.episode" />
+                        <img v-else src="/dist/images/info32.png" width="16" height="16" class="plotInfoNone" alt="" />
                         <span>{{episode.title}}</span>
                     </td>
                     <td class="col-name">{{episode.location}}</td>
@@ -279,7 +279,7 @@
                     <td v-for="flag in episode.subtitles" class="col-subtitles" align="center">
                         <!-- ## @TODO: ??? -->
                         <!-- ## alt="${subtitles.name_from_code(flag)}" -->
-                        <img v-bind:src="'dist/images/subtitles/flags/' + flag + '.png'" width="16" height="11" onError="this.onerror=null;this.src='images/flags/unknown.png';" />
+                        <img v-bind:src="'/dist/images/subtitles/flags/' + flag + '.png'" width="16" height="11" onError="this.onerror=null;this.src='images/flags/unknown.png';" />
                     </td>
                     <!-- ##      curStatus, curQuality = Quality.splitCompositeStatus(int(epResult["status"])) %>
                     ##     % if curQuality != Quality.NONE:
@@ -290,20 +290,20 @@
                     <td class="col-search">
                         <template v-if="episode.season !== 0">
                             <a v-if="config.useFailedDownloads && [statusStrings.SNATCHED, statusStrings.SNATCHED_PROPER, statusStrings.SNATCHED_BEST, statusStrings.DOWNLOADED].indexOf(episode.status)">
-                                <img src="dist/images/search16.png" height="16" alt="retry" title="Retry Download" />
+                                <img src="/dist/images/search16.png" height="16" alt="retry" title="Retry Download" />
                             </a>
                             <a v-else>
-                                <img data-ep-search src="dist/images/search16.png" width="16" height="16" alt="search" title="Forced Search" />
+                                <img data-ep-search src="/dist/images/search16.png" width="16" height="16" alt="search" title="Forced Search" />
                             </a>
                             <!-- <a class="epManualSearch" id="${str(show.indexerid)}x${str(epResult["season"])}x${str(epResult["episode"])}" name="${str(show.indexerid)}x${str(epResult["season"])}x${str(epResult["episode"])}" href="home/snatchSelection?show=${show.indexerid}&amp;season=${epResult["season"]}&amp;episode=${epResult["episode"]}&amp;manual_search_type=episode">
-                                <img data-ep-manual-search src="dist/images/manualsearch.png" width="16" height="16" alt="search" title="Manual Search" />
+                                <img data-ep-manual-search src="/dist/images/manualsearch.png" width="16" height="16" alt="search" title="Manual Search" />
                             </a> -->
                         </template>
                         <template v-else>
-                            <!-- <a class="epManualSearch" id="${str(show.indexerid)}x${str(epResult["season"])}x${str(epResult["episode"])}" name="${str(show.indexerid)}x${str(epResult["season"])}x${str(epResult["episode"])}" href="home/snatchSelection?show=${show.indexerid}&amp;season=${epResult["season"]}&amp;episode=${epResult["episode"]}&amp;manual_search_type=episode"><img data-ep-manual-search src="dist/images/manualsearch.png" width="16" height="16" alt="search" title="Manual Search" /></a> -->
+                            <!-- <a class="epManualSearch" id="${str(show.indexerid)}x${str(epResult["season"])}x${str(epResult["episode"])}" name="${str(show.indexerid)}x${str(epResult["season"])}x${str(epResult["episode"])}" href="home/snatchSelection?show=${show.indexerid}&amp;season=${epResult["season"]}&amp;episode=${epResult["episode"]}&amp;manual_search_type=episode"><img data-ep-manual-search src="/dist/images/manualsearch.png" width="16" height="16" alt="search" title="Manual Search" /></a> -->
                         <template>
                     <!-- ##     % if int(epResult["status"]) not in Quality.SNATCHED + Quality.SNATCHED_PROPER and app.USE_SUBTITLES and show.subtitles and epResult["location"] and subtitles.needs_subtitles(epResult['subtitles']):
-                    ##         <a class="epSubtitlesSearch" href="home/searchEpisodeSubtitles?show=${show.indexerid}&amp;season=${epResult["season"]}&amp;episode=${epResult["episode"]}"><img src="dist/images/closed_captioning.png" height="16" alt="search subtitles" title="Search Subtitles" /></a>
+                    ##         <a class="epSubtitlesSearch" href="home/searchEpisodeSubtitles?show=${show.indexerid}&amp;season=${epResult["season"]}&amp;episode=${epResult["episode"]}"><img src="/dist/images/closed_captioning.png" height="16" alt="search subtitles" title="Search Subtitles" /></a>
                     ##     % endif -->
                     </td>
                 </tr>

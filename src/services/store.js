@@ -71,7 +71,7 @@ export default {
         },
         auth: {
             url: 'http://localhost:8081/api/v2/',
-            key: 'a2f694d2a12cc1fdc92a9d4bf7aa114c'
+            key: ''
         }
     },
     statusStrings: {

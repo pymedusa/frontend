@@ -3,11 +3,15 @@
         <div class="login">
             <form action="" method="post">
                 <h1>Medusa</h1>
+                <span v-if="error" style="color: red; font-size: 20px;">ERROR: {{error}}</span>
                 <div class="ctrlHolder">
                     <input class="inlay" v-model="username" type="text" placeholder="Username" autocomplete="off" />
                 </div>
                 <div class="ctrlHolder">
                     <input class="inlay" v-model="password" type="password" placeholder="Password" autocomplete="off" />
+                </div>
+                <div class="ctrlHolder">
+                    <input class="inlay" v-model="baseUrl" type="text" placeholder="http://localhost:8081/api/v2" autocomplete="off" />
                 </div>
                 <div class="ctrlHolder">
                     <label class="remember_me" title="for 30 days">
@@ -31,7 +35,9 @@ export default {
         return {
             username: '',
             password: '',
-            rememberMe: true
+            baseUrl: 'http://localhost:8081/api/v2',
+            rememberMe: true,
+            error: ''
         }
     },
     methods: {
