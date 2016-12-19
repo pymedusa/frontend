@@ -316,7 +316,6 @@
 // Services
 import api from '../services/api.js'
 import apiAsset from '../services/apiAsset.js'
-import store from '../services/store.js'
 
 // Methods
 import anonRedirect from '../methods/anonRedirect.js'
@@ -327,10 +326,10 @@ import QualityPill from '../components/QualityPill.vue'
 
 export default {
     name: 'show',
+    store: ['config', 'statusStrings', 'shows'],
     data() {
         return {
             isLoading: false,
-            shows: [],
             show: {
                 id: {
                     tvdb: '',
@@ -366,25 +365,10 @@ export default {
                     start: null
                 },
                 size: 0 // @TODO: This is ${pretty_file_size(app.helpers.get_size(showLoc[0]))} in Python
-            },
-            config: store.state,
-            statusStrings: {
-                UNKNOWN: "Unknown",
-                UNAIRED: "Unaired",
-                SNATCHED: "Snatched",
-                DOWNLOADED: "Downloaded",
-                SKIPPED: "Skipped",
-                SNATCHED_PROPER: "Snatched (Proper)",
-                WANTED: "Wanted",
-                ARCHIVED: "Archived",
-                IGNORED: "Ignored",
-                SUBTITLED: "Subtitled",
-                FAILED: "Failed",
-                SNATCHED_BEST: "Snatched (Best)"
             }
         }
     },
-    created() {
+    mounted() {
         this.getShows();
         this.getShow(this.$route.params.showId);
     },

@@ -127,7 +127,6 @@
 // Services
 import api from '../services/api.js'
 import apiAsset from '../services/apiAsset.js'
-import store from '../services/store.js'
 
 // Methods
 import anonRedirect from '../methods/anonRedirect.js'
@@ -138,14 +137,13 @@ import QualityPill from '../components/QualityPill.vue'
 
 export default {
     name: 'home',
+    store: ['config', 'shows', 'authenticated', 'user'],
     data () {
         return {
-            shows: [],
-            error: null,
-            config: store.state
+            error: null
         }
     },
-    created () {
+    mounted () {
         // fetch the data when the view is created and the data is
         // already being observed
         this.getShows();

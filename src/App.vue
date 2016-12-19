@@ -1,6 +1,7 @@
 <template>
     <div>
-        <nav v-if="auth.loggedIn()" class="navbar navbar-default navbar-fixed-top hidden-print" role="navigation">
+        You are {{authenticated ? '' : 'not'}} logged in.
+        <nav v-if="authenticated" class="navbar navbar-default navbar-fixed-top hidden-print" role="navigation">
             <div class="container-fluid">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main_nav">
@@ -21,7 +22,7 @@
                                 <b class="caret"></b>
                             </router-link>
                             <ul class="dropdown-menu">
-                                <li><router-link :to="{ name: 'home' }"><i class="menu-icon-home"></i>&nbsp;Show List</router-link></li>
+                                <!-- <li><router-link :to="{ name: 'home' }"><i class="menu-icon-home"></i>&nbsp;Show List</router-link></li>
                                 <li><router-link :to="{ name: 'addShow' }"><i class="menu-icon-addshow"></i>&nbsp;Add Shows</router-link></li>
                                 <li><router-link :to="{ name: 'addRecommended' }"><i class="menu-icon-addshow"></i>&nbsp;Add Recommended Shows</router-link></li>
                                 <li><router-link :to="{ name: 'postProcess' }"><i class="menu-icon-postprocess"></i>&nbsp;Manual Post-Processing</router-link></li>
@@ -30,7 +31,7 @@
                                     <router-link :to="{ name: 'show', params:{ showId: show.ids['thetvdb'] } }">
                                         <i class="menu-icon-addshow"></i> {{show.name}}
                                     </router-link>
-                                </li>
+                                </li> -->
                             </ul>
                             <div style="clear:both;"></div>
                         </li>
@@ -101,7 +102,7 @@
                                 <li><a href="home/updateCheck?pid=${sbPID}"><i class="menu-icon-update"></i>&nbsp;Check For Updates</a></li>
                                 <li><a href="home/restart/?pid=${sbPID}" class="confirm restart"><i class="menu-icon-restart"></i>&nbsp;Restart</a></li>
                                 <li><a href="home/shutdown/?pid=${sbPID}" class="confirm shutdown"><i class="menu-icon-shutdown"></i>&nbsp;Shutdown</a></li>
-                                <li v-if="!auth.loggedIn()"><a href="logout" class="confirm logout"><i class="menu-icon-shutdown"></i>&nbsp;Logout</a></li>
+                                <li v-if="!authenticated"><a href="logout" class="confirm logout"><i class="menu-icon-shutdown"></i>&nbsp;Logout</a></li>
                                 <li role="separator" class="divider"></li>
                                 <li><a href="home/status/"><i class="menu-icon-info"></i>&nbsp;Server Status</a></li>
                             </ul>
@@ -112,7 +113,7 @@
             </div>
         </nav>
         <router-view></router-view>
-        <footer v-if="auth.loggedIn()">
+        <footer v-if="authenticated">
             <div class="footer clearfix">
                 <!-- <span class="footerhighlight">${stats['shows']['total']}</span> Shows (<span class="footerhighlight">${stats['shows']['active']}</span> Active)
                 | <span class="footerhighlight">${ep_downloaded}</span>
@@ -141,23 +142,34 @@
     </div>
 </template>
 <script>
-// Services
-import store from './services/store.js'
-
-// Methods
-import anonRedirect from './methods/anonRedirect.js'
+import auth from './services/auth.js';
+import api from './services/api.js';
+import anonRedirect from './methods/anonRedirect.js';
 
 export default {
     name: 'app',
-    data () {
+    store: ['config', 'shows', 'authenticated', 'user'],
+    data() {
         return {
-            auth: {
-                loggedIn: function() {
-                    return true;
+            recentShows: []
+        }
+    },
+    mounted() {
+        // Set vm as app context so it can be accessed inside of other contexts
+        var vm = this;
+
+        this.$store.authenticated = auth.isAuthenticated();
+        this.$store.user = JSON.parse(localStorage.getItem('user'));
+
+        // Get the initial config data if logged in
+        if (this.$store.authenticated) {
+            api.get('config').then(function(response) {
+                for (var key in response.data) {
+                    vm.$store.config[key] = response.data[key];
                 }
-            },
-            recentShows: [],
-            config: store.state
+            }).catch(function(error) {
+                throw new Error(error);
+            });
         }
     },
     methods: {

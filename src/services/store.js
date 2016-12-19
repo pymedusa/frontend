@@ -1,9 +1,5 @@
 export default {
-    state: {
-        auth: {
-            key: '30ea37dc47b16f2d96fd3d1b4a9fc6a7',
-            url: 'http://localhost:8081/api/v2/'
-        },
+    config: {
         anonRedirect: null,
         anonSplitHome: null,
         comingEpsLayout: null,
@@ -72,6 +68,27 @@ export default {
         },
         failedDownloads: {
             enabled: null
+        },
+        auth: {
+            url: 'http://localhost:8081/api/v2/',
+            key: 'a2f694d2a12cc1fdc92a9d4bf7aa114c'
         }
-    }
+    },
+    statusStrings: {
+        UNKNOWN: "Unknown",
+        UNAIRED: "Unaired",
+        SNATCHED: "Snatched",
+        DOWNLOADED: "Downloaded",
+        SKIPPED: "Skipped",
+        SNATCHED_PROPER: "Snatched (Proper)",
+        WANTED: "Wanted",
+        ARCHIVED: "Archived",
+        IGNORED: "Ignored",
+        SUBTITLED: "Subtitled",
+        FAILED: "Failed",
+        SNATCHED_BEST: "Snatched (Best)"
+    },
+    shows: [],
+    authenticated: false,
+    user: {}
 }

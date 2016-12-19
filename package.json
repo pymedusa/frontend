@@ -4,6 +4,8 @@
   "author": "X O <xo@wvvw.me>",
   "private": true,
   "scripts": {
+    "start": "npm-run-all --parallel caddy watchify",
+    "caddy": "caddy",
     "watchify": "watchify -vd -p browserify-hmr -e src/main.js -o dist/build.js",
     "serve": "http-server -o -s -c 1 -a localhost",
     "dev": "npm-run-all --parallel watchify serve",
@@ -11,7 +13,9 @@
   },
   "dependencies": {
     "axios": "^0.15.2",
-    "vue": "^2.0.1"
+    "vue": "^2.0.1",
+    "vue-router": "^2.1.1",
+    "vue-stash": "^2.0.1-beta"
   },
   "devDependencies": {
     "babel-core": "^6.0.0",
@@ -32,5 +36,9 @@
       "vueify",
       "babelify"
     ]
-  }
+  },
+  "version": "1.0.0",
+  "main": "dist/build.js",
+  "repository": "https://github.com/pymedusa/frontend.git",
+  "license": "MIT"
 }
