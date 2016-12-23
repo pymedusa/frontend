@@ -13,8 +13,6 @@
   },
   "dependencies": {
     "axios": "^0.15.2",
-    "deep-diff": "^0.3.4",
-    "node-simple-logger-es6": "^0.0.5",
     "vue": "^2.0.1",
     "vue-router": "^2.1.1",
     "vue-stash": "^2.0.1-beta"

@@ -124,7 +124,6 @@
     </div>
 </template>
 <script>
-import {diff} from 'deep-diff';
 
 // Services
 import api from '../services/api.js'
