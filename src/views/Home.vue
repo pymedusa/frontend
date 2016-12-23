@@ -4,7 +4,7 @@
             <tr>
                 <td align="right">
                     <div>
-                        <span v-if="config.homeLayout !== 'poster'">
+                        <span v-if="config.layout.home !== 'poster'">
                             <span class="show-option">
                                 <button id="popover" type="button" class="btn btn-inline">Select Columns <b class="caret"></b></button>
                             </span>
@@ -12,7 +12,7 @@
                                 <button type="button" class="resetsorting btn btn-inline">Clear Filter(s)</button>
                             </span>
                         </span>
-                        <span v-if="config.homeLayout === 'poster'">
+                        <span v-if="config.layout.home === 'poster'">
                             <span class="show-option"> Poster Size: <div style="width: 100px; display: inline-block; margin-left: 7px;" id="posterSizeSlider"></div>
                             </span>
                             <span class="show-option">
@@ -34,7 +34,7 @@
                             </span>
                         </span>
                         <span class="show-option"> Layout:
-                            <select name="layout" class="form-control form-control-inline input-sm" v-model="config.homeLayout">
+                            <select name="layout" class="form-control form-control-inline input-sm" v-model="config.layout.home">
                                 <option value="poster">Poster</option>
                                 <option value="small">Small Poster</option>
                                 <option value="banner">Banner</option>
@@ -45,7 +45,7 @@
                 </td>
             </tr>
         </table>
-        <table v-if="config.homeLayout === 'banner'" id="showListTable${curListType}" class="tablesorter" cellspacing="1" border="0" cellpadding="0">
+        <table v-if="config.layout.home === 'banner'" id="showListTable${curListType}" class="tablesorter" cellspacing="1" border="0" cellpadding="0">
             <thead>
                 <tr>
                     <th class="nowrap">Next Ep</th>
@@ -124,6 +124,8 @@
     </div>
 </template>
 <script>
+import {diff} from 'deep-diff';
+
 // Services
 import api from '../services/api.js'
 import apiAsset from '../services/apiAsset.js'
@@ -144,9 +146,22 @@ export default {
         }
     },
     mounted () {
+        var vm = this;
+        var deVue = function(x) {
+            return JSON.parse(JSON.stringify(x));
+        }
         // fetch the data when the view is created and the data is
         // already being observed
-        this.getShows();
+        vm.getShows();
+        vm.$watch('config', function(config) {
+            api.patch('config', deVue(config)).then(function(response) {
+                log.info(response);
+            }).catch(function (error) {
+                log.info(error);
+            });
+        }, {
+            deep: true
+        });
     },
     methods: {
         apiAsset,

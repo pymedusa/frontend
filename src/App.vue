@@ -10,25 +10,22 @@
                         <span class="icon-bar"></span>
                     </button>
                     <router-link :to="{ name: 'home' }" class="navbar-brand" title="Medusa">
-                        <img alt="Medusa" src="dist/images/medusa.png" style="height: 50px;" class="img-responsive pull-left" />
+                        <img alt="Medusa" src="/dist/images/medusa.png" style="height: 50px;" class="img-responsive pull-left" />
                     </router-link>
                 </div>
                 <div class="collapse navbar-collapse" id="main_nav">
                     <ul class="nav navbar-nav navbar-right">
                         <li id="NAVhome" class="navbar-split dropdown">
-                            <router-link :to="{ name: 'home' }" class="dropdown-toggle" aria-haspopup="true" data-toggle="dropdown" data-hover="dropdown">
-                                <span>Shows</span>
-                                <b class="caret"></b>
-                            </router-link>
+                            <router-link :to="{ name: 'home' }" class="dropdown-toggle" aria-haspopup="true" data-toggle="dropdown" data-hover="dropdown">Shows</router-link>
                             <ul class="dropdown-menu">
                                 <li><router-link :to="{ name: 'home' }"><i class="menu-icon-home"></i>&nbsp;Show List</router-link></li>
                                 <!-- <li><router-link :to="{ name: 'addShow' }"><i class="menu-icon-addshow"></i>&nbsp;Add Shows</router-link></li>
                                 <li><router-link :to="{ name: 'addRecommended' }"><i class="menu-icon-addshow"></i>&nbsp;Add Recommended Shows</router-link></li>
-                                <li><router-link :to="{ name: 'postProcess' }"><i class="menu-icon-postprocess"></i>&nbsp;Manual Post-Processing</router-link></li>
-                                <li v-if="recentShows.length > 0" role="separator" class="divider"></li> -->
+                                <li><router-link :to="{ name: 'postProcess' }"><i class="menu-icon-postprocess"></i>&nbsp;Manual Post-Processing</router-link></li> -->
+                                <li v-if="recentShows.length > 0" role="separator" class="divider"></li>
                                 <li v-for="show in recentShows">
-                                    <router-link :to="{ name: 'show', params:{ showId: show.ids['thetvdb'] } }">
-                                        <i class="menu-icon-addshow"></i> {{show.name}}
+                                    <router-link :to="{ name: 'show', params:{ showId: show.id[show.indexer] } }">
+                                        <i class="menu-icon-addshow"></i>&nbsp;<span>{{show.title}}</span>
                                     </router-link>
                                 </li>
                             </ul>
@@ -41,9 +38,7 @@
                             <a href="history/">History</a>
                         </li>
                         <li id="NAVmanage" class="navbar-split dropdown">
-                            <a href="manage/episodeStatuses/" class="dropdown-toggle" aria-haspopup="true" data-toggle="dropdown" data-hover="dropdown">
-                                <span>Manage</span> <b class="caret"></b>
-                            </a>
+                            <a href="manage/episodeStatuses/" class="dropdown-toggle" aria-haspopup="true" data-toggle="dropdown" data-hover="dropdown">Manage</a>
                             <ul class="dropdown-menu">
                                 <li><a href="manage/"><i class="menu-icon-manage"></i>&nbsp;Mass Update</a></li>
                                 <li><a href="manage/backlogOverview/"><i class="menu-icon-backlog-view"></i>&nbsp;Backlog Overview</a></li>
@@ -62,8 +57,8 @@
                             <div style="clear:both;"></div>
                         </li>
                         <li id="NAVconfig" class="navbar-split dropdown">
-                            <a href="config/" class="dropdown-toggle" aria-haspopup="true" data-toggle="dropdown" data-hover="dropdown"><span class="visible-xs-inline">Config</span><img src="dist/images/menu/system18.png" class="navbaricon hidden-xs" />
-                            <b class="caret"></b>
+                            <a href="config/" class="dropdown-toggle" aria-haspopup="true" data-toggle="dropdown" data-hover="dropdown">
+                                <span class="visible-xs-inline">Config</span><img src="dist/images/menu/system18.png" class="navbaricon hidden-xs" />
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a href="config/"><i class="menu-icon-help"></i>&nbsp;Help &amp; Info</a></li>
@@ -82,7 +77,6 @@
                             <a href="home/status/" class="dropdown-toggle" aria-haspopup="true" data-toggle="dropdown" data-hover="dropdown">
                                 <span class="visible-xs-inline">Tools</span>
                                 <img src="dist/images/menu/system18-2.png" class="navbaricon hidden-xs" />
-                                <b class="caret"></b>
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a href="news/"><i class="menu-icon-news"></i>&nbsp;News${newsBadge}</a></li>
@@ -101,7 +95,7 @@
                                 <li><a href="home/updateCheck?pid=${sbPID}"><i class="menu-icon-update"></i>&nbsp;Check For Updates</a></li>
                                 <li><a href="home/restart/?pid=${sbPID}" class="confirm restart"><i class="menu-icon-restart"></i>&nbsp;Restart</a></li>
                                 <li><a href="home/shutdown/?pid=${sbPID}" class="confirm shutdown"><i class="menu-icon-shutdown"></i>&nbsp;Shutdown</a></li>
-                                <li v-if="!authenticated"><a href="logout" class="confirm logout"><i class="menu-icon-shutdown"></i>&nbsp;Logout</a></li>
+                                <li><a href="logout" class="confirm logout"><i class="menu-icon-shutdown"></i>&nbsp;Logout</a></li>
                                 <li role="separator" class="divider"></li>
                                 <li><a href="home/status/"><i class="menu-icon-info"></i>&nbsp;Server Status</a></li>
                             </ul>
@@ -114,28 +108,16 @@
         <router-view></router-view>
         <footer v-if="authenticated">
             <div class="footer clearfix">
-                <!-- <span class="footerhighlight">${stats['shows']['total']}</span> Shows (<span class="footerhighlight">${stats['shows']['active']}</span> Active)
-                | <span class="footerhighlight">${ep_downloaded}</span>
-                % if ep_snatched:
-                <span class="footerhighlight"><a href="manage/episodeStatuses?whichStatus=2" title="View overview of snatched episodes">+${ep_snatched}</a></span> Snatched
-                % endif
-                &nbsp;/&nbsp;<span class="footerhighlight">${ep_total}</span> Episodes Downloaded ${ep_percentage}
-                | Daily Search: <span class="footerhighlight">${str(daily_search_scheduler.timeLeft()).split('.')[0]}</span>
-                | Backlog Search: <span class="footerhighlight">${str(backlog_search_scheduler.timeLeft()).split('.')[0]}</span>
+                <span class="footerhighlight">{{shows.length}}</span> Shows (<span class="footerhighlight">{{activeShows.length}}</span> Active) | <span class="footerhighlight">${ep_downloaded}</span>
+                <span class="footerhighlight"><a href="manage/episodeStatuses?whichStatus=2" title="View overview of snatched episodes">+${ep_snatched}</a></span>
+                Snatched / <span class="footerhighlight">${ep_total}</span> Episodes Downloaded ${ep_percentage}
+                | Daily Search: <span class="footerhighlight">{{dailySearchTime}}</span>
+                | Backlog Search: <span class="footerhighlight">{{backlogSearchTime}}</span>
                 <div>
-                % if mem_usage:
-                    Memory used: <span class="footerhighlight">
-                    % if mem_usage == 'resource':
-                        ${pretty_file_size(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)}
-                    % else:
-                        ${pretty_file_size(Process(getpid()).memory_info().rss)}
-                    % endif
-                    </span> |
-                % endif
-                    Load time: <span class="footerhighlight">${"%.4f" % (time() - sbStartTime)}s</span> / Mako: <span class="footerhighlight">${"%.4f" % (time() - makoStartTime)}s</span> |
-                    Branch: <span class="footerhighlight">${BRANCH}</span> |
-                    Now: <span class="footerhighlight">${datetime.now().strftime(DATE_PRESET+" "+TIME_PRESET)}</span>
-                </div> -->
+                    Load time: <span class="footerhighlight">{{pageLoadTime/1000.0}}s</span>
+                    Branch: <span class="footerhighlight">{{config.branch}}</span> |
+                    Now: <span class="footerhighlight">{{(new Date()).toDateString()}}</span>
+                </div>
             </div>
         </footer>
     </div>
@@ -147,10 +129,10 @@ import anonRedirect from './methods/anonRedirect.js';
 
 export default {
     name: 'app',
-    store: ['config', 'shows', 'authenticated', 'user'],
+    store: ['config', 'shows', 'authenticated', 'user', 'recentShows', 'statusStrings'],
     data() {
         return {
-            recentShows: []
+            pageLoadTime: 0
         }
     },
     mounted() {
@@ -173,6 +155,29 @@ export default {
     },
     methods: {
         anonRedirect
+    },
+    computed: {
+        activeShows() {
+            var vm = this;
+            if(vm.shows.length) {
+                return vm.shows.filter(function(show) {
+                    return show.status === vm.statusStrings.CONTINUING;
+                });
+            }
+            return [];
+        },
+        endedShows() {
+            var vm = this;
+            if(vm.shows.length) {
+                return vm.shows.filter(function(show) {
+                    return show.status === vm.statusStrings.ENDED;
+                });
+            }
+            return [];
+        },
+        downloadedEpisodes() {
+
+        }
     }
 }
 </script>

@@ -8,30 +8,34 @@
 
         <title>Medusa</title>
 
-        <link rel="shortcut icon" href="dist/images/ico/favicon.ico">
-        <link rel="icon" sizes="16x16 32x32 64x64" href="dist/images/ico/favicon.ico">
-        <link rel="icon" type="image/png" sizes="196x196" href="dist/images/ico/favicon-196.png">
-        <link rel="icon" type="image/png" sizes="160x160" href="dist/images/ico/favicon-160.png">
-        <link rel="icon" type="image/png" sizes="96x96" href="dist/images/ico/favicon-96.png">
-        <link rel="icon" type="image/png" sizes="64x64" href="dist/images/ico/favicon-64.png">
-        <link rel="icon" type="image/png" sizes="32x32" href="dist/images/ico/favicon-32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="dist/images/ico/favicon-16.png">
-        <link rel="apple-touch-icon" sizes="152x152" href="dist/images/ico/favicon-152.png">
-        <link rel="apple-touch-icon" sizes="144x144" href="dist/images/ico/favicon-144.png">
-        <link rel="apple-touch-icon" sizes="120x120" href="dist/images/ico/favicon-120.png">
-        <link rel="apple-touch-icon" sizes="114x114" href="dist/images/ico/favicon-114.png">
-        <link rel="apple-touch-icon" sizes="76x76" href="dist/images/ico/favicon-76.png">
-        <link rel="apple-touch-icon" sizes="72x72" href="dist/images/ico/favicon-72.png">
-        <link rel="apple-touch-icon" href="dist/images/ico/favicon-57.png">
-        <link rel="stylesheet" type="text/css" href="dist/css/vender.min.css"/>
-        <link rel="stylesheet" type="text/css" href="dist/css/browser.css" />
-        <link rel="stylesheet" type="text/css" href="dist/css/lib/jquery-ui-1.10.4.custom.min.css" />
-        <link rel="stylesheet" type="text/css" href="dist/css/lib/jquery.qtip-2.2.1.min.css"/>
-        <link rel="stylesheet" type="text/css" href="dist/css/style.css"/>
-        <link rel="stylesheet" type="text/css" href="dist/css/dark.css" />
-        <link rel="stylesheet" type="text/css" href="dist/css/print.css" />
-        <link rel="stylesheet" type="text/css" href="dist/css/country-flags.css"/>
+        <link rel="shortcut icon" href="/dist/images/ico/favicon.ico">
+        <link rel="icon" sizes="16x16 32x32 64x64" href="/dist/images/ico/favicon.ico">
+        <link rel="icon" type="image/png" sizes="196x196" href="/dist/images/ico/favicon-196.png">
+        <link rel="icon" type="image/png" sizes="160x160" href="/dist/images/ico/favicon-160.png">
+        <link rel="icon" type="image/png" sizes="96x96" href="/dist/images/ico/favicon-96.png">
+        <link rel="icon" type="image/png" sizes="64x64" href="/dist/images/ico/favicon-64.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/dist/images/ico/favicon-32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/dist/images/ico/favicon-16.png">
+        <link rel="apple-touch-icon" sizes="152x152" href="/dist/images/ico/favicon-152.png">
+        <link rel="apple-touch-icon" sizes="144x144" href="/dist/images/ico/favicon-144.png">
+        <link rel="apple-touch-icon" sizes="120x120" href="/dist/images/ico/favicon-120.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="/dist/images/ico/favicon-114.png">
+        <link rel="apple-touch-icon" sizes="76x76" href="/dist/images/ico/favicon-76.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="/dist/images/ico/favicon-72.png">
+        <link rel="apple-touch-icon" href="/dist/images/ico/favicon-57.png">
+        <!-- @TODO: We need to drop vender.min.css and replace it with bootstap and vue styles -->
+        <link rel="stylesheet" type="text/css" href="/dist/css/vender.min.css"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css" integrity="sha384-AysaV+vQoT3kOAXZkl02PThvDr8HYKPZhNT5h/CXfBThSRXQ6jW5DO2ekP5ViFdi" crossorigin="anonymous">
+        <link rel="stylesheet" type="text/css" href="/dist/css/browser.css" />
+        <link rel="stylesheet" type="text/css" href="/dist/css/lib/jquery-ui-1.10.4.custom.min.css" />
+        <link rel="stylesheet" type="text/css" href="/dist/css/lib/jquery.qtip-2.2.1.min.css"/>
+        <link rel="stylesheet" type="text/css" href="/dist/css/style.css"/>
+        <link rel="stylesheet" type="text/css" href="/dist/css/dark.css" />
+        <link rel="stylesheet" type="text/css" href="/dist/css/print.css" />
+        <link rel="stylesheet" type="text/css" href="/dist/css/country-flags.css"/>
         <style>
+        /* This is just until we work out how to move to 16px since in v3 we used 14px */
+        :root { font-size: 14px; }
         #content {
             width: 100%;
             margin-top:51px;
@@ -40,6 +44,6 @@
     </head>
     <body>
         <div id="app"></div>
-        <script src="dist/build.js"></script>
+        <script src="/dist/build.js"></script>
     </body>
 </html>

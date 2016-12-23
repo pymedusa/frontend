@@ -326,7 +326,7 @@ import QualityPill from '../components/QualityPill.vue'
 
 export default {
     name: 'show',
-    store: ['config', 'statusStrings', 'shows'],
+    store: ['config', 'statusStrings', 'shows', 'recentShows'],
     data() {
         return {
             isLoading: false,
@@ -383,6 +383,11 @@ export default {
                         for (var key in response.data) {
                             vm.$set(vm.show, key, response.data[key]);
                         }
+                        // Only keep 5 shows in list
+                        if (vm.recentShows.length >= 5) {
+                            vm.recentShows.pop();
+                        }
+                        vm.recentShows.unshift(response.data);
                         vm.isLoading = false;
                     }).catch(function (error) {
                         throw new Error(error);

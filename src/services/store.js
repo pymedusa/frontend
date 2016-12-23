@@ -2,12 +2,9 @@ export default {
     config: {
         anonRedirect: null,
         anonSplitHome: null,
-        comingEpsLayout: null,
         comingEpsSort: null,
         datePreset: null,
         fuzzyDating: null,
-        historyLayout: null,
-        homeLayout: null,
         themeName: null,
         posterSortby: null,
         posterSortdir: null,
@@ -69,26 +66,37 @@ export default {
         failedDownloads: {
             enabled: null
         },
+        layout: {
+            comingEpisodes: null,
+            history: null,
+            home: null
+        },
         auth: {
             url: 'http://localhost:8081/api/v2/',
             key: ''
         }
     },
     statusStrings: {
-        UNKNOWN: "Unknown",
-        UNAIRED: "Unaired",
-        SNATCHED: "Snatched",
-        DOWNLOADED: "Downloaded",
-        SKIPPED: "Skipped",
-        SNATCHED_PROPER: "Snatched (Proper)",
-        WANTED: "Wanted",
-        ARCHIVED: "Archived",
-        IGNORED: "Ignored",
-        SUBTITLED: "Subtitled",
-        FAILED: "Failed",
-        SNATCHED_BEST: "Snatched (Best)"
+        UNKNOWN: 'Unknown',
+        UNAIRED: 'Unaired',
+        SNATCHED: 'Snatched',
+        DOWNLOADED: 'Downloaded',
+        SKIPPED: 'Skipped',
+        SNATCHED_PROPER: 'Snatched (Proper)',
+        WANTED: 'Wanted',
+        ARCHIVED: 'Archived',
+        IGNORED: 'Ignored',
+        SUBTITLED: 'Subtitled',
+        FAILED: 'Failed',
+        SNATCHED_BEST: 'Snatched (Best)',
+        ENDED: 'Ended',
+        CONTINUING: 'Continuing'
     },
     shows: [],
+    recentShows: [],
     authenticated: false,
-    user: {}
+    user: {},
+    debug: {
+        pageLoadTime: 0
+    }
 }

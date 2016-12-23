@@ -2,6 +2,12 @@ import api from './api.js';
 
 export default {
     isAuthenticated() {
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (this.hasRoles(['developer'])) {
+            log.setDefaultLevel('trace');
+        } else {
+            log.setDefaultLevel('error');
+        }
         return !!localStorage.getItem('idToken');
     },
     login() {
@@ -12,22 +18,26 @@ export default {
             username: vm.username,
             password: vm.password
         }).then(function (response) {
+            // console.dir(response);
+            // @TODO: We should check for x-medusa-server header to make sure it actually is Medusa
+            //        If we don't we could get weird JSON/HTML back and that breaks a LOT of the config data
+            // console.log(response.headers);
             // Set the token and user profile in local storage
             // @TODO: Replace apiKey with idToken once we have JWT
-            localStorage.setItem('idToken', response.data.apiKey);
+            localStorage.setItem('idToken', response.data.idToken);
             localStorage.setItem('baseUrl', vm.baseUrl);
             localStorage.setItem('user', JSON.stringify({
-                roles: ['admin', 'user']
+                roles: response.data.roles
             }));
             // @TODO: These will need JWT added to Medusa, ATM we fake the user
             // localStorage.setItem('refreshToken', response.data.refreshToken);
             // localStorage.setItem('user', JSON.stringify(response.data.user));
 
             // Update auth service
-           vm.$store.authenticated = true;
-           vm.$store.user = {
-               roles: ['admin', 'user']
-           };
+            vm.$store.authenticated = true;
+            vm.$store.user = {
+                roles: response.data.roles
+            };
 
             api.get('config').then(function(response) {
                 for (var key in response.data) {

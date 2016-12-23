@@ -1,12 +1,17 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import VueStash from 'vue-stash';
+import BootstrapVue from 'bootstrap-vue';
+import * as log from 'loglevel';
 import store from './services/store.js'
 import routes from './services/routes.js'
 import App from './App.vue'
 
+window.log = log.noConflict();
+
 Vue.use(VueRouter);
 Vue.use(VueStash);
+Vue.use(BootstrapVue);
 
 const router = new VueRouter({
     routes,
