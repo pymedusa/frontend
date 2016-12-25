@@ -47,7 +47,6 @@ export default {
                     name: 'home'
                 });
             }).catch(function(error) {
-                console.log(error);
                 if (error.response) {
                     if (error.response.data.error) {
                         vm.error = error.response.data.error;
