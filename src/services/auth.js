@@ -24,7 +24,7 @@ export default {
             // console.log(response.headers);
             // Set the token and user profile in local storage
             // @TODO: Replace apiKey with idToken once we have JWT
-            localStorage.setItem('idToken', response.data.idToken);
+            localStorage.setItem('idToken', response.data.apiKey);
             localStorage.setItem('baseUrl', vm.baseUrl);
             localStorage.setItem('user', JSON.stringify({
                 roles: response.data.roles
@@ -47,8 +47,11 @@ export default {
                     name: 'home'
                 });
             }).catch(function(error) {
-                if (error.response.data.error) {
-                    vm.error = error.response.data.error;
+                console.log(error);
+                if (error.response) {
+                    if (error.response.data.error) {
+                        vm.error = error.response.data.error;
+                    }
                 }
                 throw new Error(error);
             });
