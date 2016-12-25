@@ -19,20 +19,26 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    if (to.meta.auth) {
-        let user = JSON.parse(localStorage.getItem('user'));
-        if (user) {
-            let success = to.meta.auth.every(function(v,i) {
-                return user.roles.indexOf(v) !== -1;
-            });
-            next(success);
-        } else {
-            next({
-                name: 'login'
-            });
-        }
+    let user = JSON.parse(localStorage.getItem('user'));
+    if (to.path === '/login' && user) {
+        next({
+            name: 'home'
+        });
     } else {
-        next();
+        if (to.meta.auth) {
+            if (user) {
+                let success = to.meta.auth.every(function(v,i) {
+                    return user.roles.indexOf(v) !== -1;
+                });
+                next(success);
+            } else {
+                next({
+                    name: 'login'
+                });
+            }
+        } else {
+            next();
+        }
     }
 });
 
