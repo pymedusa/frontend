@@ -42,8 +42,7 @@ export default {
     },
     methods: {
         login: auth.login,
-        logout: auth.logout,
-        hasRoles: auth.hasRoles
+        logout: auth.logout
     }
 }
 </script>

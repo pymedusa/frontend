@@ -1,9 +1,10 @@
 import api from './api.js';
+import jwt_decode from 'jwt-decode';
 
 export default {
     isAuthenticated() {
         const user = JSON.parse(localStorage.getItem('user'));
-        if (this.hasRoles(['developer'])) {
+        if (this.hasScopes(['developer'])) {
             log.setDefaultLevel('trace');
         } else {
             log.setDefaultLevel('error');
@@ -14,34 +15,35 @@ export default {
         var vm = this;
         // @NOTE: If you're not logged in then all URLs will be naked
         vm.baseUrl = vm.baseUrl.replace(/\/+$/, ''); // Remove trailing slashes
-        api.post(vm.baseUrl + '/auth/login', {
+        api.post(vm.baseUrl + '/authenticate', {
             username: vm.username,
             password: vm.password
         }).then(function (response) {
-            if('idToken' in response.data && 'roles' in response.data) {
+            let token = jwt_decode(response.data);
+            if(token) {
                 // @TODO: We should check for x-medusa-server header to make sure it actually is Medusa
                 //        If we don't we could get weird JSON/HTML back and that breaks a LOT of the config data
                 // Set the token and user profile in local storage
                 // @TODO: Replace apiKey with idToken once we have JWT
-                localStorage.setItem('idToken', response.data.idToken);
+                localStorage.setItem('idToken', response.data);
                 localStorage.setItem('baseUrl', vm.baseUrl);
                 localStorage.setItem('user', JSON.stringify({
-                    roles: response.data.roles
+                    scopes: token.scopes,
+                    username: token.username,
+                    apiKey: token.apiKey // Currently this is for images, etc. that can't send headers
                 }));
-                // @TODO: These will need JWT added to Medusa, ATM we fake the user
-                // localStorage.setItem('refreshToken', response.data.refreshToken);
-                // localStorage.setItem('user', JSON.stringify(response.data.user));
 
-                // Update auth service
-                vm.$store.authenticated = true;
                 vm.$store.user = {
-                    roles: response.data.roles
+                    scopes: token.scopes
                 };
 
                 api.get('config').then(function(response) {
                     for (var key in response.data) {
                         vm.$store.config[key] = response.data[key];
                     }
+                    // We leave this to just before $router.push
+                    // so nothing loads before config is set
+                    vm.$store.authenticated = true;
                     vm.$router.push({
                         name: 'home'
                     });
@@ -55,10 +57,13 @@ export default {
                 throw new Error('UPDATE MEDUSA');
             }
         }).catch(function (error) {
-            if ('error' in error.response.data) {
-                vm.error = error.response.data.error;
+            if ('response' in error){
+                if ('error' in error.response.data) {
+                    vm.error = error.response.data.error;
+                }
+            } else {
+                throw new Error(error);
             }
-            throw new Error(error);
         });
     },
     logout() {
@@ -73,14 +78,14 @@ export default {
             name: 'home'
         });
     },
-    hasRoles(roles) {
-        // If the user has the role in their roles array then return true, otherwise return false
-        roles = (Array.isArray(roles) ? roles : [roles]);
+    hasScopes(scopes) {
+        // If the user has the scope in their scopes array then return true, otherwise return false
+        scopes = (Array.isArray(scopes) ? scopes : [scopes]);
         let user = JSON.parse(localStorage.getItem('user'));
         if (user) {
-            if ('roles' in user && user['roles'].length > 0) {
-                return roles.every(function(v, i) {
-                    return user.roles.indexOf(v) !== -1;
+            if ('scopes' in user && user['scopes'].length > 0) {
+                return scopes.every(function(v, i) {
+                    return user.scopes.indexOf(v) !== -1;
                 });
             }
             return false;

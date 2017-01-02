@@ -28,7 +28,7 @@ router.beforeEach((to, from, next) => {
         if (to.meta.auth) {
             if (user) {
                 let success = to.meta.auth.every(function(v,i) {
-                    return user.roles.indexOf(v) !== -1;
+                    return user.scopes.indexOf(v) !== -1;
                 });
                 next(success);
             } else {

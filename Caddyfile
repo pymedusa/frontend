@@ -3,3 +3,9 @@ localhost:8080 {
         to {path} {path}/ /index.html
     }
 }
+localhost:4040 {
+    tls self_signed
+    proxy / localhost:8081 {
+    }
+    cors
+}

@@ -9,14 +9,14 @@ export default [{
     path: '/',
     component: HomeComponent,
     meta: {
-        auth: ['user']
+        auth: ['show:read']
     }
 }, {
     name: 'show',
     path: '/show/:showId',
     component: ShowComponent,
     meta: {
-        auth: ['user']
+        auth: ['show:read']
     }
 }, {
     name: 'login',
@@ -29,8 +29,5 @@ export default [{
 }, {
     name: 'notFound',
     path: '*',
-    component: NotFoundComponent,
-    meta: {
-        auth: ['user']
-    }
+    component: NotFoundComponent
 }];
